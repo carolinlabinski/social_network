@@ -1,4 +1,4 @@
-//import React from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Form, Input, Button, Checkbox } from "antd";
 import Cookies from "js-cookie";
@@ -8,8 +8,6 @@ import { useDispatch } from "react-redux";
 import { buyPastas } from "../../redux";
 import { eatPastas } from "../../redux";
 import { logIn } from "../../redux";
-// import React from "react";
-import React, { useEffect } from "react";
 
 const layout = {
 	labelCol: { span: 4 },
@@ -24,7 +22,7 @@ const Register = () => {
 	const dispatch = useDispatch();
 
 	const onFinish = (values, authenticated) => {
-		dispatch(buyPastas());
+		// dispatch(buyPastas());
 		console.log("Success:", values);
 		console.log(values.username);
 		console.log(values.password);
@@ -45,6 +43,7 @@ const Register = () => {
 		})
 			.then((res) => res.json())
 			.then((post) => {
+				dispatch(buyPastas());
 				console.log(post);
 				console.log(post.jwt);
 				console.log(post.user);
@@ -70,9 +69,7 @@ const Register = () => {
 	return (
 		<div>
 			<br />
-			<h2>Hook: number of pastas kg : {pastas} </h2>
-			<button onClick={() => dispatch(buyPastas())}>buy pastas</button>
-			<button onClick={() => dispatch(eatPastas())}>eat pastas</button>
+			<h2>You are: {pastas} </h2>
 			<Link to="/login">Already registerd? Login here</Link>
 			<Form
 				{...layout}

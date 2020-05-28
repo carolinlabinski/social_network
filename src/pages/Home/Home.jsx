@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import PostForm from "../../components/PostForm/PostForm.jsx";
 import { useSelector } from "react-redux";
+import { Button } from "antd";
+import jwt_decode from "jwt-decode";
 
 const Home = () => {
 	const pastas = useSelector((state) => state.pastas);
@@ -21,6 +23,42 @@ const Home = () => {
 			});
 	}, []);
 
+	const deleteTweet = (id) => {
+		let jwt = Cookies.get("token");
+		const postId = id;
+		const url = "https://api-minireseausocial.mathis-dyk.fr/posts/" + postId;
+		fetch(url, {
+			method: "delete",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${jwt}`,
+			},
+		}).then(console.log("post " + id + " deleted"));
+	};
+
+	const modifyTweet = (id) => {
+		let tweet = "THP finally tweetin (updated)";
+		console.log(tweet);
+
+		let jwt = Cookies.get("token");
+		const data = {
+			text: tweet,
+			id: jwt_decode(jwt).id,
+		};
+		console.log(jwt_decode(jwt).id);
+
+		const postId = id;
+		const url = "https://api-minireseausocial.mathis-dyk.fr/posts/" + postId;
+		fetch(url, {
+			method: "put",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${jwt}`,
+			},
+			body: JSON.stringify(data),
+		}).then(console.log("post 125 deleted"));
+	};
+
 	return (
 		<div>
 			<br />
@@ -36,6 +74,31 @@ const Home = () => {
 				<div key={key}>
 					<h5 style={{ marginLeft: "50px" }}>{post.text}</h5>
 					<h3 style={{ marginLeft: "50px", color: "red" }}>{post.id}</h3>
+
+					{pastas === "authenticated" && (
+						<Button
+							type="primary"
+							style={{ marginLeft: "50px" }}
+							onClick={() => {
+								deleteTweet(post.id);
+							}}
+							id={post.id}
+						>
+							Delete
+						</Button>
+					)}
+					{pastas === "authenticated" && (
+						<Button
+							type="primary"
+							style={{ marginLeft: "50px" }}
+							onClick={() => {
+								modifyTweet(post.id);
+							}}
+							id={post.id}
+						>
+							Modify
+						</Button>
+					)}
 					{/* <h3 style={{ marginLeft: "50px", color: "red" }}>{post[0].user.id}</h3> */}
 					{/* <h3 style={{ marginLeft: "50px", color: "red" }}>{post}</h3> */}
 				</div>
