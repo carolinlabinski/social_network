@@ -2,7 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Form, Input, Button, Checkbox } from "antd";
 import Cookies from "js-cookie";
-//import React, { useState, useEffect } from "react";
+// import { logIn } from "../../redux";
+// import { useSelector } from "react-redux";
+// import { useDispatch } from "react-redux";
+// import React, { useEffect } from "react";
 
 const layout = {
 	labelCol: { span: 4 },
@@ -11,8 +14,21 @@ const layout = {
 const tailLayout = {
 	wrapperCol: { offset: 4, span: 8 },
 };
+// const authenticated = useSelector((state) => state.authenticated);
+// const dispatch = useDispatch();
+// useEffect(() => {
+// 	console.log(authenticated);
+// }, []);
 
 const Login = () => {
+	// const authenticated = useSelector((state) => state.authenticated);
+	// const dispatch = useDispatch();
+	// console.log("status" + authenticated);
+
+	const login = () => {
+		// dispatch(logIn());
+	};
+
 	const onFinish = (values) => {
 		console.log("Success:", values);
 		console.log(values.identifier);
@@ -55,6 +71,7 @@ const Login = () => {
 				name="basic"
 				initialValues={{ remember: true }}
 				onFinish={onFinish}
+				onSubmit={login}
 				onFinishFailed={onFinishFailed}
 			>
 				<Form.Item label="Email or username" name="identifier">

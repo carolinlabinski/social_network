@@ -8,22 +8,27 @@ import Login from "./pages/Login/";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "antd/dist/antd.css";
 import { Provider } from "react-redux";
-import store from "./redux/store";
+//import store from "./redux/store";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 //import { logIn } from "./redux";
 import PostForm from "./components/PostForm/PostForm.jsx";
+import { createStore } from "redux";
+import pastasReducer from "./redux/pastas/pastasReducer";
+
+const store = createStore(pastasReducer);
 
 function App() {
 	const PrivateRoute = ({ component: Component, ...rest }) => {
 		//const authenticated = useSelector((state) => state.authenticated);
-		const authenticated = true;
-		console.log("app" + authenticated);
+		const pastas = useSelector((state) => state.pastas);
+		//const authenticated = true;
+
 		return (
 			<Route
 				{...rest}
 				render={(props) =>
-					authenticated === true ? (
+					pastas === "authenticated" ? (
 						<Component {...props} />
 					) : (
 						<Redirect to={{ pathname: "/login" }} />
@@ -48,7 +53,6 @@ function App() {
 							<Login />
 						</Route>
 						<Route exact path="/">
-							<PostForm />
 							<Home />
 						</Route>
 						{/* <Route exact path="/profile">

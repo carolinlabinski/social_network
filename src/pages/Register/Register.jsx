@@ -5,8 +5,11 @@ import Cookies from "js-cookie";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { buyPastas } from "../../redux";
+import { eatPastas } from "../../redux";
 import { logIn } from "../../redux";
-import React from "react";
+// import React from "react";
+import React, { useEffect } from "react";
 
 const layout = {
 	labelCol: { span: 4 },
@@ -17,12 +20,11 @@ const tailLayout = {
 };
 
 const Register = () => {
-	const authenticated = useSelector((state) => state.authenticated);
+	const pastas = useSelector((state) => state.pastas);
 	const dispatch = useDispatch();
 
-	console.log(authenticated);
-
 	const onFinish = (values, authenticated) => {
+		dispatch(buyPastas());
 		console.log("Success:", values);
 		console.log(values.username);
 		console.log(values.password);
@@ -68,12 +70,15 @@ const Register = () => {
 	return (
 		<div>
 			<br />
+			<h2>Hook: number of pastas kg : {pastas} </h2>
+			<button onClick={() => dispatch(buyPastas())}>buy pastas</button>
+			<button onClick={() => dispatch(eatPastas())}>eat pastas</button>
 			<Link to="/login">Already registerd? Login here</Link>
 			<Form
 				{...layout}
 				name="basic"
 				initialValues={{ remember: true }}
-				onSubmit={() => dispatch(logIn())}
+				// onClick={() => dispatch(buyPastas())}
 				onFinish={onFinish}
 				onFinishFailed={onFinishFailed}
 			>
@@ -85,7 +90,11 @@ const Register = () => {
 					<Input />
 				</Form.Item>
 
-				<Form.Item label="Email" name="email">
+				<Form.Item
+					label="Email"
+					name="email"
+					rules={[{ required: true, message: "Please input your mail!" }]}
+				>
 					<Input />
 				</Form.Item>
 

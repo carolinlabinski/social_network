@@ -1,2 +1,2 @@
-export { logIn } from "./users/userActions";
-// export { logOut } from "./users/userActions";
+export { buyPastas } from "./pastas/pastasActions";
+export { eatPastas } from "./pastas/pastasActions";
