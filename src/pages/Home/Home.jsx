@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import PostForm from "../../components/PostForm/PostForm.jsx";
+import { useSelector } from "react-redux";
 
 const Home = () => {
+	const pastas = useSelector((state) => state.pastas);
 	console.log("Check cookies on home:" + Cookies.get("token"));
 	console.log("Check cookies still home:" + Cookies.get("token"));
 	const [dataPost, setDataPost] = useState([]);
@@ -27,7 +29,7 @@ const Home = () => {
 				This website is a training to Redux and React. We use auth and routing to
 				create a small social media website.
 			</p>
-			<PostForm />
+			{pastas === "authenticated" && <PostForm />}
 			<br />
 			<h3 style={{ marginLeft: "50px" }}>Latest posts of the THP community:</h3>
 			{dataPost.map((post, key) => (

@@ -2,6 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Form, Input, Button, Checkbox } from "antd";
 import Cookies from "js-cookie";
+import { buyPastas } from "../../redux";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { eatPastas } from "../../redux";
 // import { logIn } from "../../redux";
 // import { useSelector } from "react-redux";
 // import { useDispatch } from "react-redux";
@@ -21,15 +25,14 @@ const tailLayout = {
 // }, []);
 
 const Login = () => {
+	const pastas = useSelector((state) => state.pastas);
+	const dispatch = useDispatch();
 	// const authenticated = useSelector((state) => state.authenticated);
 	// const dispatch = useDispatch();
 	// console.log("status" + authenticated);
 
-	const login = () => {
-		// dispatch(logIn());
-	};
-
 	const onFinish = (values) => {
+		dispatch(buyPastas());
 		console.log("Success:", values);
 		console.log(values.identifier);
 		console.log(values.password);
@@ -65,13 +68,16 @@ const Login = () => {
 	return (
 		<div>
 			<br />
+			<h2>Hook: number of pastas kg : {pastas} </h2>
+			<button onClick={() => dispatch(buyPastas())}>buy pastas</button>
+			<button onClick={() => dispatch(eatPastas())}>eat pastas</button>
 			<Link to="/login">Already registerd? Login here</Link>
 			<Form
 				{...layout}
 				name="basic"
 				initialValues={{ remember: true }}
 				onFinish={onFinish}
-				onSubmit={login}
+				// onSubmit={login}
 				onFinishFailed={onFinishFailed}
 			>
 				<Form.Item label="Email or username" name="identifier">
