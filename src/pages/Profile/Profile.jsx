@@ -31,10 +31,6 @@ const Profile = () => {
 		})
 			.then((res) => res.json())
 			.then((post) => {
-				console.log(post);
-				console.log(post.username);
-				console.log(post.user);
-				console.log(post.email);
 				setDataUser(post.username);
 				setDataMail(post.email);
 				setDataDescription(post.description);

@@ -1,27 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Cookies from "js-cookie";
 import PostForm from "../../components/PostForm/PostForm.jsx";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Button } from "antd";
 import jwt_decode from "jwt-decode";
+import shortid from "shortid"
+
+import { getPosts } from "../../redux"
 
 const Home = () => {
-	const pastas = useSelector((state) => state.pastas);
-	console.log("Check cookies on home:" + Cookies.get("token"));
-	console.log("Check cookies still home:" + Cookies.get("token"));
-	const [dataPost, setDataPost] = useState([]);
+	const dispatch = useDispatch();
+	const posts = useSelector((state) => state.posts.posts);
+
+	console.log(posts)
+
+
+
 
 	useEffect(() => {
 		fetch(
 			"https://api-minireseausocial.mathis-dyk.fr/posts?_limit=50&_sort=created_at:desc"
 		)
 			.then((res) => res.json())
-			.then((post) => {
-				console.log(post);
-				console.log("hello");
-				setDataPost(post);
+			.then((response) => {
+				dispatch(getPosts(response))
 			});
-	}, []);
+	}, [dispatch]);
 
 	const deleteTweet = (id) => {
 		let jwt = Cookies.get("token");
@@ -62,45 +66,75 @@ const Home = () => {
 	return (
 		<div>
 			<br />
+			
+
 			<h1 style={{ marginLeft: "50px" }}>Welcome to THP's Social Network</h1>
 			<p style={{ marginLeft: "50px" }}>
 				This website is a training to Redux and React. We use auth and routing to
 				create a small social media website.
 			</p>
-			{pastas === "authenticated" && <PostForm />}
+			
+
+			{Cookies.get('token') ? <PostForm /> : ""}
+			
+
 			<br />
+			
+
+
 			<h3 style={{ marginLeft: "50px" }}>Latest posts of the THP community:</h3>
-			{dataPost.map((post, key) => (
-				<div key={key}>
+			
+
+
+
+
+
+			{ 
+				posts !== {} && posts.map((post) => (
+
+
+				<div key={shortid.generate()}>
+
+
+
 					<h5 style={{ marginLeft: "50px" }}>{post.text}</h5>
 					<h3 style={{ marginLeft: "50px", color: "red" }}>{post.id}</h3>
 
-					{pastas === "authenticated" && (
+					
+
+
+
+
+					{Cookies.get('token') ?  
+
+					<div>
+
 						<Button
 							type="primary"
 							style={{ marginLeft: "50px" }}
 							onClick={() => {
 								deleteTweet(post.id);
 							}}
-							id={post.id}
+							id={shortid.generate()}
 						>
 							Delete
 						</Button>
-					)}
-					{pastas === "authenticated" && (
 						<Button
 							type="primary"
 							style={{ marginLeft: "50px" }}
 							onClick={() => {
 								modifyTweet(post.id);
 							}}
-							id={post.id}
+							id={shortid.generate()}
 						>
 							Modify
 						</Button>
-					)}
-					{/* <h3 style={{ marginLeft: "50px", color: "red" }}>{post[0].user.id}</h3> */}
-					{/* <h3 style={{ marginLeft: "50px", color: "red" }}>{post}</h3> */}
+
+					</div>
+
+
+					: ""}
+
 				</div>
 			))}
 		</div>

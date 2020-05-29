@@ -1,11 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Form, Input, Button, Checkbox } from "antd";
 import Cookies from "js-cookie";
-import { buyPastas } from "../../redux";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { eatPastas } from "../../redux";
+import { buyPastas, eatPastas } from "../../redux";
+import { useSelector, useDispatch } from "react-redux";
 // import { logIn } from "../../redux";
 
 const layout = {
@@ -17,18 +15,15 @@ const tailLayout = {
 };
 
 const Login = () => {
+	const history = useHistory();
 	const pastas = useSelector((state) => state.pastas);
 	const dispatch = useDispatch();
 
-	const onFinish = (values) => {
-		// dispatch(buyPastas());
-		console.log("Success:", values);
-		console.log(values.identifier);
-		console.log(values.password);
+	const onFinish = ({identifier, password}) => {
 
 		const data = {
-			identifier: values.identifier,
-			password: values.password,
+			identifier,
+			password,
 		};
 
 		fetch("https://api-minireseausocial.mathis-dyk.fr/auth/local/", {
@@ -41,11 +36,8 @@ const Login = () => {
 			.then((res) => res.json())
 			.then((post) => {
 				dispatch(buyPastas());
-				console.log(post);
-				console.log("I am connected.");
-				console.log(post.jwt);
 				Cookies.set("token", post.jwt);
-				console.log("Cookies get:" + Cookies.get("token"));
+				history.push("/");
 			});
 	};
 

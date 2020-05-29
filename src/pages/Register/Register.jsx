@@ -1,13 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Form, Input, Button, Checkbox } from "antd";
 import Cookies from "js-cookie";
-import { Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { buyPastas } from "../../redux";
-import { eatPastas } from "../../redux";
-import { logIn } from "../../redux";
+import { useSelector, useDispatch } from "react-redux";
+import { buyPastas, logIn, eatPastas } from "../../redux";
+
 
 const layout = {
 	labelCol: { span: 4 },
@@ -18,6 +15,8 @@ const tailLayout = {
 };
 
 const Register = () => {
+
+	const history = useHistory();
 	const pastas = useSelector((state) => state.pastas);
 	const dispatch = useDispatch();
 
@@ -44,16 +43,9 @@ const Register = () => {
 			.then((res) => res.json())
 			.then((post) => {
 				dispatch(buyPastas());
-				console.log(post);
-				console.log(post.jwt);
-				console.log(post.user);
-				Cookies.set("token", post.jwt);
-				console.log("Cookies get:" + Cookies.get("token"));
 
-				console.log("testss" + authenticated);
-				if (authenticated === true) {
-					return <Redirect to="/" />;
-				}
+				Cookies.set("token", post.jwt);
+				history.push("/");
 			})
 			.then((posts) => {
 				console.log(posts);

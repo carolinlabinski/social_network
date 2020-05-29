@@ -1,11 +1,18 @@
 import React from "react";
 import jwt_decode from "jwt-decode";
-import { Input } from "antd";
-import { Button } from "antd";
+import { useDispatch } from "react-redux";
+import { Input, Button } from "antd";
 import Cookies from "js-cookie";
 
+import { createPost } from "../../redux"
+
+
 const PostFrom = () => {
+	const dispatch = useDispatch();
+
+	
 	const sendTweet = () => {
+
 		let tweet = document.getElementById("tweet").value;
 		console.log(tweet);
 
@@ -23,7 +30,12 @@ const PostFrom = () => {
 				Authorization: `Bearer ${jwt}`,
 			},
 			body: JSON.stringify(data),
-		}).then(console.log("post sent"));
+		})
+
+		.then((res) => res.json())
+		.then((response) => {
+			dispatch(createPost(response))
+		});
 	};
 
 	return (
